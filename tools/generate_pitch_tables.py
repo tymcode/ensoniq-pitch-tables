@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import math
 from pathlib import Path
 
 NOTE_NAMES = ["C", "C+", "D", "D+", "E", "F", "F+", "G", "G+", "A", "A+", "B"]
@@ -45,15 +46,18 @@ def build_table_rows(name: str, deviations_by_pc: dict[int, float]) -> list[list
         source = midi_to_name(midi_note)
         deviation = deviations_by_pc.get(pitch_class, 0.0)
         target_note, cents = encode_target_from_deviation(midi_note, deviation)
+        frequency_hz = 440.0 * math.pow(2.0, ((midi_note - 69) + (deviation / 100.0)) / 12.0)
         mapping = f"{source}={target_note}+{cents:02d} cents"
-        rows.append([source, target_note, f"{cents:02d}", mapping, name])
+        rows.append([source, target_note, f"{cents:02d}", f"{frequency_hz:.2f}", mapping, name])
     return rows
 
 
 def write_csv(path: Path, rows: list[list[str]]) -> None:
     with path.open("w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["source_key", "target_note", "offset_cents", "display_mapping", "tuning_name"])
+        writer.writerow(
+            ["source_key", "target_note", "offset_cents", "frequency_hz", "display_mapping", "tuning_name"]
+        )
         writer.writerows(rows)
 
 
