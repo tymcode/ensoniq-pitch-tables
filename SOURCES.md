@@ -1,6 +1,6 @@
 # Sources and Bibliography
 
-This project uses practical, performance-oriented approximations of multiple microtonal traditions, adapted to Ensoniq pitch-table limits.
+This project uses practical, performance-oriented approximations of multiple microtonal traditions, adapted to Ensoniq pitch-table patterns.
 
 ## Turkish Makam
 
@@ -31,11 +31,4 @@ This project uses practical, performance-oriented approximations of multiple mic
 - Barbour, J. Murray. *Tuning and Temperament: A Historical Survey*. Dover, 2004 (reprint).
 - 5-limit just-intonation interval-ratio practice (for the `indian_just_major_c_5limit` style reference table).
 
-## Notes on Use in This Repository
-
-- These references inform interval tendencies and modal color, not strict one-to-one transcription of any single school.
-- Final CSV values are constrained by Ensoniq table format:
-  - chromatic source keys only
-  - chromatic natural/sharp targets only
-  - positive cent offsets (`00` to `99`)
-- Because of those constraints, each table should be treated as a playable approximation for performance workflow.
+These references inform interval tendencies and modal color, not strict one-to-one transcription of any single school.

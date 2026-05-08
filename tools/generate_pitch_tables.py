@@ -4,7 +4,22 @@ import csv
 import math
 from pathlib import Path
 
-NOTE_NAMES = ["C", "C+", "D", "D+", "E", "F", "F+", "G", "G+", "A", "A+", "B"]
+# Ensoniq display convention: sharps show as trailing "+" after octave.
+# Example: F#4 is "F4+"
+PITCH_CLASS_TO_NAME = [
+    ("C", False),
+    ("C", True),
+    ("D", False),
+    ("D", True),
+    ("E", False),
+    ("F", False),
+    ("F", True),
+    ("G", False),
+    ("G", True),
+    ("A", False),
+    ("A", True),
+    ("B", False),
+]
 
 # 61-key Ensoniq-style span (common C-to-C keyboard range).
 START_MIDI = 36  # C2
@@ -14,7 +29,8 @@ KEY_COUNT = 61
 def midi_to_name(midi_note: int) -> str:
     pitch_class = midi_note % 12
     octave = (midi_note // 12) - 1
-    return f"{NOTE_NAMES[pitch_class]}{octave}"
+    letter, sharp = PITCH_CLASS_TO_NAME[pitch_class]
+    return f"{letter}{octave}{'+' if sharp else ''}"
 
 
 def encode_target_from_deviation(midi_note: int, deviation_cents: float) -> tuple[str, int]:
@@ -36,7 +52,8 @@ def encode_target_from_deviation(midi_note: int, deviation_cents: float) -> tupl
 
     pitch_class = target_note % 12
     octave = (target_note // 12) - 1
-    return f"{NOTE_NAMES[pitch_class]}{octave}", cents
+    letter, sharp = PITCH_CLASS_TO_NAME[pitch_class]
+    return f"{letter}{octave}{'+' if sharp else ''}", cents
 
 
 def build_table_rows(name: str, deviations_by_pc: dict[int, float]) -> list[list[str]]:
@@ -47,7 +64,8 @@ def build_table_rows(name: str, deviations_by_pc: dict[int, float]) -> list[list
         deviation = deviations_by_pc.get(pitch_class, 0.0)
         target_note, cents = encode_target_from_deviation(midi_note, deviation)
         frequency_hz = 440.0 * math.pow(2.0, ((midi_note - 69) + (deviation / 100.0)) / 12.0)
-        mapping = f"{source}={target_note}+{cents:02d} cents"
+        # Avoid ambiguity since "+" is also used to display sharps (e.g. "F4+").
+        mapping = f"{source}={target_note} {cents:02d} cents"
         rows.append([source, target_note, f"{cents:02d}", f"{frequency_hz:.2f}", mapping, name])
     return rows
 
