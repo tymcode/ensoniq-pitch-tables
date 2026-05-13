@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 LETTER_PC = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
-NOTE_RE = re.compile(r"^([A-G])(\d+)(\+?)$")
+NOTE_RE = re.compile(r"^([A-G])(-?\d+)(\+?)$")
 
 # A=440 ET: MIDI 0 frequency (matches AnaMark TUN_Scale.cpp DefaultBaseFreqHz / InitEqual math)
 INIT_EQUAL_MIDI = 69

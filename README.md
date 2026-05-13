@@ -34,7 +34,7 @@ On an Ensoniq keyboard the best way to do this is to duplicate layers and set th
 
 ## 19-EDO and 31-EDO
 
-There are **linear equal division** tables **`edo_19_linear`** and **`edo_31_linear`**: each step up the chromatic MIDI keyboard is one step of that EDO (with **A4 = 440 Hz** at MIDI 69). They are produced by `tools/generate_pitch_tables.py` alongside the other CSVs, with matching **`scl/`** and **`tun/`** exports from `scripts/csv_to_scl.py` and `scripts/csv_to_tun.py`. See the caveats below for how this interacts with the **`.scl`** layout.
+There are **linear equal division** tables **`edo_19_linear`** and **`edo_31_linear`**: each step up the chromatic MIDI keyboard is one step of that EDO (with **A4 = 440 Hz** at MIDI 69). Their CSVs list **MIDI 0–127** (every standard note number, **C-1** through **G9+**) to enable specialized MIDI controllers to access more octaves. They are produced by `tools/generate_pitch_tables.py` alongside the other CSVs, with matching **`scl/`** and **`tun/`** exports from `scripts/csv_to_scl.py` and `scripts/csv_to_tun.py`. See the caveats below for how this interacts with the **`.scl`** layout.
 
 ## Caveats (accuracy and exports)
 

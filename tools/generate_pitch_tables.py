@@ -70,14 +70,21 @@ def build_table_rows(name: str, deviations_by_pc: dict[int, float]) -> list[list
     return rows
 
 
+# Full MIDI pitch range (note numbers 0–127 inclusive).
+MIDI_FULL_RANGE = range(0, 128)
+
+
 def build_linear_edo_rows(name: str, n: int) -> list[list[str]]:
     """
     Linear n-EDO mapped to the chromatic MIDI keyboard: each +1 MIDI note raises
     pitch by exactly one step of n-EDO (so one physical octave spans 12/n octaves).
     A4 (MIDI 69) = 440 Hz. Deviations are expressed vs 12-TET for Ensoniq encoding.
+
+    Rows cover **MIDI 0–127** (128 notes), including C-1 through G9+ naming, so
+    `.tun` exports need no synthetic fill inside standard MIDI.
     """
     rows: list[list[str]] = []
-    for midi_note in range(START_MIDI, START_MIDI + KEY_COUNT):
+    for midi_note in MIDI_FULL_RANGE:
         deviation = (midi_note - 69) * 100.0 * (12.0 / n - 1.0)
         source = midi_to_name(midi_note)
         target_note, cents = encode_target_from_deviation(midi_note, deviation)

@@ -10,7 +10,7 @@ from pathlib import Path
 
 LETTER_PC = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
 # Ensoniq names: letter, octave, optional trailing '+' (sharp), e.g. C4+, F3.
-NOTE_RE = re.compile(r"^([A-G])(\d+)(\+?)$")
+NOTE_RE = re.compile(r"^([A-G])(-?\d+)(\+?)$")
 
 # (letter, sharp): physical keys in one octave; last entry is C natural next octave.
 SCALE_DEGREES: tuple[tuple[str, bool], ...] = (
