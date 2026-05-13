@@ -70,6 +70,23 @@ def build_table_rows(name: str, deviations_by_pc: dict[int, float]) -> list[list
     return rows
 
 
+def build_linear_edo_rows(name: str, n: int) -> list[list[str]]:
+    """
+    Linear n-EDO mapped to the chromatic MIDI keyboard: each +1 MIDI note raises
+    pitch by exactly one step of n-EDO (so one physical octave spans 12/n octaves).
+    A4 (MIDI 69) = 440 Hz. Deviations are expressed vs 12-TET for Ensoniq encoding.
+    """
+    rows: list[list[str]] = []
+    for midi_note in range(START_MIDI, START_MIDI + KEY_COUNT):
+        deviation = (midi_note - 69) * 100.0 * (12.0 / n - 1.0)
+        source = midi_to_name(midi_note)
+        target_note, cents = encode_target_from_deviation(midi_note, deviation)
+        frequency_hz = 440.0 * math.pow(2.0, ((midi_note - 69) + (deviation / 100.0)) / 12.0)
+        mapping = f"{source}={target_note} {cents:02d} cents"
+        rows.append([source, target_note, f"{cents:02d}", f"{frequency_hz:.2f}", mapping, name])
+    return rows
+
+
 def write_csv(path: Path, rows: list[list[str]]) -> None:
     with path.open("w", newline="") as f:
         writer = csv.writer(f)
@@ -161,6 +178,10 @@ def main() -> None:
     for tuning_name, deviations in tunings.items():
         rows = build_table_rows(tuning_name, deviations)
         write_csv(out_dir / f"{tuning_name}.csv", rows)
+
+    # Linear n-EDO: each MIDI semitone = one n-EDO step; A4 = 440 Hz (see build_linear_edo_rows).
+    for n, tuning_name in ((19, "edo_19_linear"), (31, "edo_31_linear")):
+        write_csv(out_dir / f"{tuning_name}.csv", build_linear_edo_rows(tuning_name, n))
 
 
 if __name__ == "__main__":

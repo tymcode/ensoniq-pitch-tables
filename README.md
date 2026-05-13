@@ -32,6 +32,10 @@ The *note*_tonic folders are for use when your drone/home tone is *note*
 
 On an Ensoniq keyboard the best way to do this is to duplicate layers and set the different pitch tables for each layer.  Then set each to be active with specific combinations of the patch select buttons of your choosing.  Note that you can set a foot switch to activate a patch select and switch tables with your foot.
 
+## 19-EDO and 31-EDO
+
+There are **linear equal division** tables **`edo_19_linear`** and **`edo_31_linear`**: each step up the chromatic MIDI keyboard is one step of that EDO (with **A4 = 440 Hz** at MIDI 69). They are produced by `tools/generate_pitch_tables.py` alongside the other CSVs, with matching **`scl/`** and **`tun/`** exports from `scripts/csv_to_scl.py` and `scripts/csv_to_tun.py`. See the caveats below for how this interacts with the **`.scl`** layout.
+
 ## Caveats (accuracy and exports)
 
 These tables are **practical stage tools**, not authoritative acoustic measurements of every tradition they nod to. Real-world intonation varies by region, instrument, ensemble, and performer; the underlying literature is itself interpretive. Here the goal is a **usable Ensoniq mapping**: each physical key is tied to a **12-TET chromatic anchor** plus a **non-negative cent sharpen**. That design cannot represent every theoretical or performed inflection (for example, downward “flattening” is folded into choosing a lower anchor and sharpening from there), and the coarse grid plus rounding is a further compromise.
@@ -39,6 +43,8 @@ These tables are **practical stage tools**, not authoritative acoustic measureme
 **Numbers in the CSVs** are rounded for display and tooling: `frequency_hz` and cent offsets are not carried at arbitrary precision, so derived quantities can drift slightly from a purely mathematical scale definition.
 
 **Scala `.scl` files** (see `scripts/csv_to_scl.py`, output under `scl/`) encode **one chromatic octave** built from the **C4–B4** keys plus **C5** as the octave closure, with **implicit 0 cents at physical C4**. They do **not** embed Ensoniq’s full keyboard layout or per-key labels. Software that imports `.scl` without a **Scala keyboard mapping (`.kbm`)** will apply its own mapping, which may not match how these tables feel on an Ensoniq.
+
+For the **linear 19-EDO and 31-EDO** tables, those twelve chromatic keys from **C4** to **C5** are **not** twelve twelfths of a 12-TET octave: each key rises by **one step of n-EDO** (\(1200/n\) cents), so the **last listed degree is \(12 \times 1200/n\) cents above C4**, not 1200 cents. That is correct for this mapping but may confuse tools or workflows that assume a **~1200 cent** closing step or a 12-TET-sized “octave” in the `.scl` file. The **`.tun`** files still follow the CSV frequencies directly and are not special-cased in that way.
 
 **AnaMark `.tun` files** (see `scripts/csv_to_tun.py`, output under `tun/`) set **MIDI 0–127** using the CSV **`frequency_hz`** where a row exists for that MIDI note. Notes **outside** the CSV’s keyboard span are filled with **A = 440 Hz equal temperament**, so the very low and very high ends are a convenience continuation, not sampled from the same generative logic as the table body. Where the CSV frequencies are rounded, **Exact Tuning** cent values can differ by a tiny amount from an idealized closed-form tuning.
 

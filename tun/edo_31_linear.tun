@@ -1,0 +1,165 @@
+;
+; This is an AnaMark tuning map file V2.00
+;
+; Converted from Ensoniq pitch table CSV
+;
+
+
+;
+; Begin of tuning file and format declaration
+;
+[Scale Begin]
+Format = "AnaMark-TUN"
+FormatVersion = 200
+FormatSpecs = "http:\\\\www.mark-henning.de\\eternity\\tuningspecs.html"
+
+
+;
+; Scale informations
+;
+[Info]
+Name = "edo_31_linear"
+Description = "Ensoniq pitch table edo_31_linear; csv/edo_31_linear.csv; target_note + offset_cents vs 12-TET."
+
+
+;
+; Version 1:
+; AnaMark-specific section with exact tunings
+;
+[Exact Tuning]
+BaseFreq = 8.1757989156
+Note 0 = 0
+Note 1 = 100
+Note 2 = 200
+Note 3 = 300
+Note 4 = 400
+Note 5 = 500
+Note 6 = 600
+Note 7 = 700
+Note 8 = 800
+Note 9 = 900
+Note 10 = 1000
+Note 11 = 1100
+Note 12 = 1200
+Note 13 = 1300
+Note 14 = 1400
+Note 15 = 1500
+Note 16 = 1600
+Note 17 = 1700
+Note 18 = 1800
+Note 19 = 1900
+Note 20 = 2000
+Note 21 = 2100
+Note 22 = 2200
+Note 23 = 2300
+Note 24 = 2400
+Note 25 = 2500
+Note 26 = 2600
+Note 27 = 2700
+Note 28 = 2800
+Note 29 = 2900
+Note 30 = 3000
+Note 31 = 3100
+Note 32 = 3200
+Note 33 = 3300
+Note 34 = 3400
+Note 35 = 3500
+Note 36 = 5622.59284326
+Note 37 = 5661.3267115989
+Note 38 = 5700
+Note 39 = 5738.6749266342
+Note 40 = 5777.4079722798
+Note 41 = 5816.103028726
+Note 42 = 5854.8158268055
+Note 43 = 5893.5264951919
+Note 44 = 5932.2852678088
+Note 45 = 5970.9356542671
+Note 46 = 6009.6634670839
+Note 47 = 6048.3805922726
+Note 48 = 6087.0689966729
+Note 49 = 6125.8349275746
+Note 50 = 6164.5342107226
+Note 51 = 6203.2113118922
+Note 52 = 6241.9640853124
+Note 53 = 6280.6563045769
+Note 54 = 6319.3282322863
+Note 55 = 6358.070141991
+Note 56 = 6396.7534925487
+Note 57 = 6435.4663168745
+Note 58 = 6474.1879825095
+Note 59 = 6512.8991826667
+Note 60 = 6551.6299954074
+Note 61 = 6590.31334889
+Note 62 = 6629.0256697469
+Note 63 = 6667.7463591161
+Note 64 = 6706.4561423035
+Note 65 = 6745.1800382587
+Note 66 = 6783.8563189889
+Note 67 = 6822.59284326
+Note 68 = 6861.286476074
+Note 69 = 6900
+Note 70 = 6938.7134032046
+Note 71 = 6977.4079722798
+Note 72 = 7016.1398223937
+Note 73 = 7054.8518068549
+Note 74 = 7093.5616796578
+Note 75 = 7132.2508616072
+Note 76 = 7170.9693001882
+Note 77 = 7209.6634670839
+Note 78 = 7248.3805922726
+Note 79 = 7287.1004596403
+Note 80 = 7325.8041607463
+Note 81 = 7364.5041240191
+Note 82 = 7403.2113118922
+Note 83 = 7441.9353146069
+Note 84 = 7480.6563045769
+Note 85 = 7519.3557451636
+Note 86 = 7558.070141991
+Note 87 = 7596.779802097
+Note 88 = 7635.4920446377
+Note 89 = 7674.1879825095
+Note 90 = 7712.8991826667
+Note 91 = 7751.6059369571
+Note 92 = 7790.31334889
+Note 93 = 7829.0256697469
+Note 94 = 7867.7463591161
+Note 95 = 7906.4561423035
+Note 96 = 7945.158524629
+Note 97 = 9700
+Note 98 = 9800
+Note 99 = 9900
+Note 100 = 10000
+Note 101 = 10100
+Note 102 = 10200
+Note 103 = 10300
+Note 104 = 10400
+Note 105 = 10500
+Note 106 = 10600
+Note 107 = 10700
+Note 108 = 10800
+Note 109 = 10900
+Note 110 = 11000
+Note 111 = 11100
+Note 112 = 11200
+Note 113 = 11300
+Note 114 = 11400
+Note 115 = 11500
+Note 116 = 11600
+Note 117 = 11700
+Note 118 = 11800
+Note 119 = 11900
+Note 120 = 12000
+Note 121 = 12100
+Note 122 = 12200
+Note 123 = 12300
+Note 124 = 12400
+Note 125 = 12500
+Note 126 = 12600
+Note 127 = 12700
+
+
+;
+; End of tuning file
+;
+[Scale End]
+
