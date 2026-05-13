@@ -1,0 +1,19 @@
+! indian_just_major_c_5limit.csv
+!
+! Converted from csv/indian_just_major_c_5limit.csv
+! Ensoniq: each key -> 12-TET target_note + offset_cents (sharpen).
+Ensoniq pitch table indian_just_major_c_5limit (chromatic from C4, implicit 0 = physical C)
+12
+!
+ 100.0
+ 196.0
+ 300.0
+ 386.0
+ 502.0
+ 600.0
+ 702.0
+ 800.0
+ 884.0
+ 1000.0
+ 1088.0
+ 1200.0

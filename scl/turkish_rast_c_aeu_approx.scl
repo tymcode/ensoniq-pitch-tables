@@ -1,0 +1,19 @@
+! turkish_rast_c_aeu_approx.csv
+!
+! Converted from csv/turkish_rast_c_aeu_approx.csv
+! Ensoniq: each key -> 12-TET target_note + offset_cents (sharpen).
+Ensoniq pitch table turkish_rast_c_aeu_approx (chromatic from C4, implicit 0 = physical C)
+12
+!
+ 100.0
+ 204.0
+ 300.0
+ 385.0
+ 498.0
+ 600.0
+ 702.0
+ 800.0
+ 906.0
+ 1000.0
+ 1077.0
+ 1200.0

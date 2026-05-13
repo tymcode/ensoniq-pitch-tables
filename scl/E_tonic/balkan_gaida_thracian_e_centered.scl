@@ -1,0 +1,19 @@
+! balkan_gaida_thracian_e_centered.csv
+!
+! Converted from csv/E_tonic/balkan_gaida_thracian_e_centered.csv
+! Ensoniq: each key -> 12-TET target_note + offset_cents (sharpen).
+Ensoniq pitch table balkan_gaida_thracian_e_centered (chromatic from C4, implicit 0 = physical C)
+12
+!
+ 110.0
+ 200.0
+ 300.0
+ 400.0
+ 500.0
+ 565.0
+ 715.0
+ 800.0
+ 900.0
+ 1000.0
+ 1065.0
+ 1200.0

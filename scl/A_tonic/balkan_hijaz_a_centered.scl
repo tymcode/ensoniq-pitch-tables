@@ -1,0 +1,19 @@
+! balkan_hijaz_a_centered.csv
+!
+! Converted from csv/A_tonic/balkan_hijaz_a_centered.csv
+! Ensoniq: each key -> 12-TET target_note + offset_cents (sharpen).
+Ensoniq pitch table balkan_hijaz_a_centered (chromatic from C4, implicit 0 = physical C)
+12
+!
+ 100.0
+ 218.0
+ 300.0
+ 400.0
+ 430.0
+ 600.0
+ 680.0
+ 800.0
+ 900.0
+ 1000.0
+ 1030.0
+ 1200.0

@@ -32,6 +32,16 @@ The *note*_tonic folders are for use when your drone/home tone is *note*
 
 On an Ensoniq keyboard the best way to do this is to duplicate layers and set the different pitch tables for each layer.  Then set each to be active with specific combinations of the patch select buttons of your choosing.  Note that you can set a foot switch to activate a patch select and switch tables with your foot.
 
+## Caveats (accuracy and exports)
+
+These tables are **practical stage tools**, not authoritative acoustic measurements of every tradition they nod to. Real-world intonation varies by region, instrument, ensemble, and performer; the underlying literature is itself interpretive. Here the goal is a **usable Ensoniq mapping**: each physical key is tied to a **12-TET chromatic anchor** plus a **non-negative cent sharpen**. That design cannot represent every theoretical or performed inflection (for example, downward “flattening” is folded into choosing a lower anchor and sharpening from there), and the coarse grid plus rounding is a further compromise.
+
+**Numbers in the CSVs** are rounded for display and tooling: `frequency_hz` and cent offsets are not carried at arbitrary precision, so derived quantities can drift slightly from a purely mathematical scale definition.
+
+**Scala `.scl` files** (see `scripts/csv_to_scl.py`, output under `scl/`) encode **one chromatic octave** built from the **C4–B4** keys plus **C5** as the octave closure, with **implicit 0 cents at physical C4**. They do **not** embed Ensoniq’s full keyboard layout or per-key labels. Software that imports `.scl` without a **Scala keyboard mapping (`.kbm`)** will apply its own mapping, which may not match how these tables feel on an Ensoniq.
+
+**AnaMark `.tun` files** (see `scripts/csv_to_tun.py`, output under `tun/`) set **MIDI 0–127** using the CSV **`frequency_hz`** where a row exists for that MIDI note. Notes **outside** the CSV’s keyboard span are filled with **A = 440 Hz equal temperament**, so the very low and very high ends are a convenience continuation, not sampled from the same generative logic as the table body. Where the CSV frequencies are rounded, **Exact Tuning** cent values can differ by a tiny amount from an idealized closed-form tuning.
+
 ## Acknowledgements / Sources
 
 - Turkish makam pitch logic (including comma-based practice and AEU framing): Arel-Ezgi-Uzdilek theory literature and modern explanatory summaries of that system.

@@ -1,0 +1,19 @@
+! turkish_hicaz_d_aeu_approx.csv
+!
+! Converted from csv/D_tonic/turkish_hicaz_d_aeu_approx.csv
+! Ensoniq: each key -> 12-TET target_note + offset_cents (sharpen).
+Ensoniq pitch table turkish_hicaz_d_aeu_approx (chromatic from C4, implicit 0 = physical C)
+12
+!
+ 112.0
+ 212.0
+ 325.0
+ 412.0
+ 512.0
+ 598.0
+ 710.0
+ 812.0
+ 914.0
+ 1026.0
+ 1112.0
+ 1200.0

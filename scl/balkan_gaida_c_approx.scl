@@ -1,0 +1,19 @@
+! balkan_gaida_c_approx.csv
+!
+! Converted from csv/balkan_gaida_c_approx.csv
+! Ensoniq: each key -> 12-TET target_note + offset_cents (sharpen).
+Ensoniq pitch table balkan_gaida_c_approx (chromatic from C4, implicit 0 = physical C)
+12
+!
+ 100.0
+ 200.0
+ 300.0
+ 370.0
+ 500.0
+ 600.0
+ 700.0
+ 800.0
+ 900.0
+ 1000.0
+ 1070.0
+ 1200.0
