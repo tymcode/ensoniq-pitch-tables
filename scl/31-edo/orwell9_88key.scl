@@ -1,0 +1,19 @@
+! orwell9_88key.csv
+!
+! Converted from csv/31-edo/orwell9_88key.csv
+! Ensoniq: each key -> 12-TET target_note + offset_cents (sharpen).
+Ensoniq pitch table edo_31_orwell9_88key (chromatic from C4, implicit 0 = physical C)
+12
+!
+ 155.0
+ 271.0
+ 387.0
+ 542.0
+ 542.0
+ 658.0
+ 813.0
+ 813.0
+ 968.0
+ 1084.0
+ 1200.0
+ 1200.0

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Build MIDI Tuning Standard (MTS) non-real-time bulk tuning dump SysEx files
-from Ensoniq-style CSV pitch tables.
+from Ensoniq-style CSV pitch tables. Each tuning is written as raw SysEx bytes
+to ``mts/**/*.mts`` and the same payload to ``syx/**/*.syx`` (common SysEx dump extension).
 
 Format (MMA / universal SysEx):
   F0 7E <device> 08 01 <program> <16-byte name> <xx yy zz> * 128 <checksum> F7
@@ -134,7 +135,7 @@ def build_bulk_tuning_dump(
     return bytes([0xF0]) + bytes(inner) + bytes([chk, 0xF7])
 
 
-def load_hz_list_ordered(csv_path: Path) -> tuple[list[float], str]:
+def load_hz_list_ordered(csv_path: Path, *, fill_missing_et: bool = False) -> tuple[list[float], str]:
     by_m: dict[int, float] = {}
     tuning_name = ""
     with csv_path.open(newline="", encoding="utf-8") as f:
@@ -147,8 +148,12 @@ def load_hz_list_ordered(csv_path: Path) -> tuple[list[float], str]:
             by_m[m] = float(row["frequency_hz"].strip())
             tuning_name = row.get("tuning_name", "").strip() or tuning_name
     missing = [i for i in range(128) if i not in by_m]
-    if missing:
+    if missing and not fill_missing_et:
         raise ValueError(f"{csv_path}: missing MIDI notes: {missing[:8]}… ({len(missing)} total)")
+    if fill_missing_et:
+        for i in range(128):
+            if i not in by_m:
+                by_m[i] = et_midi_freq(i)
     return [by_m[i] for i in range(128)], tuning_name
 
 
@@ -158,11 +163,16 @@ def csv_to_mts(
     *,
     program: int,
     display_name: str,
+    fill_missing_et: bool = False,
+    syx_path: Path | None = None,
 ) -> None:
-    hz128, _t = load_hz_list_ordered(csv_path)
+    hz128, _t = load_hz_list_ordered(csv_path, fill_missing_et=fill_missing_et)
     syx = build_bulk_tuning_dump(program=program, tuning_name=display_name, hz_by_midi=hz128)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_bytes(syx)
+    if syx_path is not None:
+        syx_path.parent.mkdir(parents=True, exist_ok=True)
+        syx_path.write_bytes(syx)
 
 
 def _self_test() -> None:
@@ -198,26 +208,40 @@ def main() -> None:
     root = Path(__file__).resolve().parents[1]
     csv_root = root / "csv"
     mts_root = root / "mts"
+    syx_root = root / "syx"
     if not csv_root.is_dir():
         print("No csv/ directory", file=sys.stderr)
         sys.exit(1)
 
-    # EDO linear tables only (full MIDI 0–127 rows required).
+    # EDO tables under csv/19-edo/ and csv/31-edo/ (see tools/generate_pitch_tables.py).
+    # Tuple: relative csv path, relative .mts path, tuning program 0–127, 16-char name, fill gaps with 12-TET.
     jobs = (
-        ("edo_19_linear.csv", "edo_19_linear.mts", 19, "19-EDO linear"),
-        ("edo_31_linear.csv", "edo_31_linear.mts", 31, "31-EDO linear"),
+        ("19-edo/edo_19_linear.csv", "19-edo/edo_19_linear.mts", 19, "19-EDO linear", False),
+        ("31-edo/edo_31_linear.csv", "31-edo/edo_31_linear.mts", 31, "31-EDO linear", False),
+        ("19-edo/diatonic7_88key.csv", "19-edo/diatonic7_88key.mts", 20, "19-EDO dia 88", True),
+        ("31-edo/diatonic7_88key.csv", "31-edo/diatonic7_88key.mts", 7, "31-EDO dia 88", True),
+        ("31-edo/orwell9_88key.csv", "31-edo/orwell9_88key.mts", 9, "31-EDO Orw 88", True),
     )
-    for csv_name, out_name, prog, label in jobs:
-        csv_path = csv_root / csv_name
+    for csv_rel, out_rel, prog, label, fill in jobs:
+        csv_path = csv_root / csv_rel
         if not csv_path.is_file():
             print(f"skip missing {csv_path}", file=sys.stderr)
             continue
-        out_path = mts_root / out_name
+        out_path = mts_root / out_rel
+        syx_path = syx_root / Path(out_rel).with_suffix(".syx")
         try:
-            csv_to_mts(csv_path, out_path, program=prog, display_name=label)
+            csv_to_mts(
+                csv_path,
+                out_path,
+                program=prog,
+                display_name=label,
+                fill_missing_et=fill,
+                syx_path=syx_path,
+            )
             print(out_path.relative_to(root))
+            print(syx_path.relative_to(root))
         except Exception as e:
-            print(f"FAIL {csv_name}: {e}", file=sys.stderr)
+            print(f"FAIL {csv_rel}: {e}", file=sys.stderr)
             sys.exit(1)
 
 

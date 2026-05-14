@@ -19,7 +19,7 @@ FormatSpecs = "http:\\\\www.mark-henning.de\\eternity\\tuningspecs.html"
 ;
 [Info]
 Name = "edo_19_linear"
-Description = "Ensoniq pitch table edo_19_linear; csv/edo_19_linear.csv; target_note + offset_cents vs 12-TET."
+Description = "Ensoniq pitch table edo_19_linear; csv/19-edo/edo_19_linear.csv; target_note + offset_cents vs 12-TET."
 
 
 ;

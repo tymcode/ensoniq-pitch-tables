@@ -1,6 +1,6 @@
 ! edo_31_linear.csv
 !
-! Converted from csv/edo_31_linear.csv
+! Converted from csv/31-edo/edo_31_linear.csv
 ! Ensoniq: each key -> 12-TET target_note + offset_cents (sharpen).
 Ensoniq pitch table edo_31_linear (chromatic from C4, implicit 0 = physical C)
 12

@@ -1,0 +1,19 @@
+! diatonic7_88key.csv
+!
+! Converted from csv/31-edo/diatonic7_88key.csv
+! Ensoniq: each key -> 12-TET target_note + offset_cents (sharpen).
+Ensoniq pitch table edo_31_diatonic7_88key (chromatic from C4, implicit 0 = physical C)
+12
+!
+ 0.0
+ 116.0
+ 116.0
+ 310.0
+ 503.0
+ 503.0
+ 697.0
+ 697.0
+ 813.0
+ 1007.0
+ 1007.0
+ 1200.0

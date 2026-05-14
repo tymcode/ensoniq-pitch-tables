@@ -73,6 +73,63 @@ def build_table_rows(name: str, deviations_by_pc: dict[int, float]) -> list[list
 # Full MIDI pitch range (note numbers 0–127 inclusive).
 MIDI_FULL_RANGE = range(0, 128)
 
+# Standard 88-key piano range (inclusive).
+MIDI_88_A0 = 21
+MIDI_88_C8 = 108
+MIDI_88_RANGE = range(MIDI_88_A0, MIDI_88_C8 + 1)
+
+
+def _edo_degree_offsets(step_pattern: tuple[int, ...], n: int) -> tuple[int, ...]:
+    """Scale degrees 0..n-1 (unique) from one period of a step cycle summing to n."""
+    if sum(step_pattern) != n:
+        raise ValueError(f"step pattern must sum to n={n}, got {sum(step_pattern)}")
+    cum = 0
+    offs: list[int] = [0]
+    for s in step_pattern:
+        cum += s
+        offs.append(cum % n)
+    return tuple(sorted(set(offs)))
+
+
+def build_subset_nearest_88key_rows(
+    name: str,
+    n: int,
+    step_pattern: tuple[int, ...],
+    *,
+    description_comment: str = "",
+) -> list[list[str]]:
+    """
+    Map each chromatic MIDI key on an 88-key (A0–C8) span to the **nearest**
+    pitch in the repeating n-EDO MOS defined by ``step_pattern`` (sums to n).
+
+    Tonic: MIDI 69 (A4) = 440 Hz at EDO step 0. Each candidate pitch is
+    ``440 * 2 ** (d / n)`` for integer step d = degree + j*n.
+
+    ``description_comment`` is unused in CSV; kept for caller documentation.
+    """
+    _ = description_comment
+    degrees = _edo_degree_offsets(step_pattern, n)
+    rows: list[list[str]] = []
+
+    # Precompute candidate steps near the 88-key band (in units of n-EDO steps from A4).
+    j_lo, j_hi = -24, 24
+    candidates: list[int] = []
+    for j in range(j_lo, j_hi + 1):
+        for deg in degrees:
+            candidates.append(deg + j * n)
+
+    for midi_note in MIDI_88_RANGE:
+        f_et = 440.0 * math.pow(2.0, (midi_note - 69) / 12.0)
+        d_want = (midi_note - 69) * (n / 12.0)
+        best_d = min(candidates, key=lambda d: abs(d - d_want))
+        f_hz = 440.0 * math.pow(2.0, best_d / float(n))
+        deviation = 1200.0 * math.log2(f_hz / f_et) if f_et > 0 else 0.0
+        source = midi_to_name(midi_note)
+        target_note, cents = encode_target_from_deviation(midi_note, deviation)
+        mapping = f"{source}={target_note} {cents:02d} cents"
+        rows.append([source, target_note, f"{cents:02d}", f"{f_hz:.2f}", mapping, name])
+    return rows
+
 
 def build_linear_edo_rows(name: str, n: int) -> list[list[str]]:
     """
@@ -186,9 +243,48 @@ def main() -> None:
         rows = build_table_rows(tuning_name, deviations)
         write_csv(out_dir / f"{tuning_name}.csv", rows)
 
-    # Linear n-EDO: each MIDI semitone = one n-EDO step; A4 = 440 Hz (see build_linear_edo_rows).
-    for n, tuning_name in ((19, "edo_19_linear"), (31, "edo_31_linear")):
-        write_csv(out_dir / f"{tuning_name}.csv", build_linear_edo_rows(tuning_name, n))
+    # n-EDO assets live under csv/19-edo/ and csv/31-edo/ (linear + 88-key subset maps).
+    edo19 = out_dir / "19-edo"
+    edo31 = out_dir / "31-edo"
+    edo19.mkdir(parents=True, exist_ok=True)
+    edo31.mkdir(parents=True, exist_ok=True)
+
+    # Linear: each MIDI semitone = one n-EDO step; A4 = 440 Hz.
+    write_csv(edo19 / "edo_19_linear.csv", build_linear_edo_rows("edo_19_linear", 19))
+    write_csv(edo31 / "edo_31_linear.csv", build_linear_edo_rows("edo_31_linear", 31))
+
+    # 88-key (A0–C8): nearest pitch on a heptatonic MOS (LLsLLLs) inside n-EDO.
+    # 19-EDO: L=3, s=2 → 3+3+2+3+3+3+2 = 19.
+    write_csv(
+        edo19 / "diatonic7_88key.csv",
+        build_subset_nearest_88key_rows(
+            "edo_19_diatonic7_88key",
+            19,
+            (3, 3, 2, 3, 3, 3, 2),
+            description_comment="19-EDO heptatonic MOS LLsLLLs (L=3,s=2); nearest to 12-TET per key",
+        ),
+    )
+    # 31-EDO: L=5, s=3 → 5+5+3+5+5+5+3 = 31.
+    write_csv(
+        edo31 / "diatonic7_88key.csv",
+        build_subset_nearest_88key_rows(
+            "edo_31_diatonic7_88key",
+            31,
+            (5, 5, 3, 5, 5, 5, 3),
+            description_comment="31-EDO heptatonic MOS LLsLLLs (L=5,s=3); nearest to 12-TET per key",
+        ),
+    )
+    # 31-EDO 9-note MOS: 5×3 + 4×4 = 31 (five small 3, four large 4). Step cycle:
+    # 3,3,4,3,3,4,3,4,4 — common unequal 9-step pattern on 31.
+    write_csv(
+        edo31 / "orwell9_88key.csv",
+        build_subset_nearest_88key_rows(
+            "edo_31_orwell9_88key",
+            31,
+            (3, 3, 4, 3, 3, 4, 3, 4, 4),
+            description_comment="31-EDO 9-step MOS (5×3 + 4×4); nearest to 12-TET per key",
+        ),
+    )
 
 
 if __name__ == "__main__":

@@ -35,6 +35,6 @@ These references inform interval tendencies and modal color, not strict one-to-o
 
 ## MIDI Tuning Standard (`.mts` bulk SysEx exports)
 
-The `mts/` bulk tuning dumps are aligned with the **non-real-time bulk tuning** message layout and **21-bit frequency word** interpretation used in the wild. Verification was done against the reference **MTS-ESP** client implementation:
+The `mts/` bulk tuning dumps are aligned with the **non-real-time bulk tuning** message layout and **21-bit frequency word** interpretation used in the wild. The same bytes are also written under `syx/` with a **`.syx`** extension for hosts and librarians that expect that naming. Verification was done against the reference **MTS-ESP** client implementation:
 
 - **ODDSound / MTS-ESP** — [https://github.com/ODDSound/MTS-ESP](https://github.com/ODDSound/MTS-ESP). In particular, `Client/libMTSClient.cpp` function `parseMIDIData` (bulk / `eBulk` branch): `F0` … `7E` … `08` `01`, 16-byte tuning name, then 128 triplets assembled as `(b0<<14)|(b1<<7)|b2`, coarse pitch `(sysex_value >> 14) & 127`, fractional semitone `(sysex_value & 16383) / 16383.0`, applied as `440.0 * pow(2.0, ((retuneNote + detune) - 69.0) / 12.0)`. The project’s `scripts/csv_to_mts.py` uses that same **16383** fractional denominator and the same A4=440 reference so generated files decode the same way as that client. The MTS-ESP README also describes loading `.scl`, `.kbm`, `.tun`, and MTS SysEx for host-wide retuning.
